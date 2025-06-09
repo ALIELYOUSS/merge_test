@@ -1,19 +1,17 @@
 SRC = src/parser/syntax_errors_utils.c src/parser/syntax_errors.c src/main.c src/utils/libft/libft_utils.c src/utils/libft/libft_utils1.c src/utils/prompt_utils.c src/tokenizer/get_word.c src/tokenizer/tokenize.c \
-    src/tokenizer/quotes_error.c src/cmd_builder/cmd_builder.c src/cmd_builder/redirections.c src/cmd_builder/cmd_builder_utils.c\
-	$(wildcard execution/*.c) $(wildcard built_in/*.c)
+    src/tokenizer/quotes_error.c src/cmd_builder/cmd_builder.c src/cmd_builder/redirections.c src/cmd_builder/cmd_builder_utils.c $(wildcard execution/*.c) $(wildcard built_in/*.c)
+
 OBJ = $(SRC:.c=.o)
 
-SRC_BONUS =
-
-OBJ_BONUS = $(SRC_BONUS:.c=.o)
+# OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
 CC = cc
 
-# FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror 
 
 NAME = minishell
 
-NAME_BONUS = minishell_bonus
+# NAME_BONUS = minishell_bonus
 
 all: $(NAME)
 

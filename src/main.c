@@ -75,12 +75,26 @@ void	print_list(t_list *tokens)
 // 	content = NULL;
 // }
 
-int	main(int ac, char **av)
+void	print_cmd(t_cmd *cmd)
+{
+	t_cmd *tmp;
+	tmp = cmd;
+	while (tmp)
+	{
+		if (tmp->cmd)
+			printf("%s\n", tmp->cmd);
+		else 
+			printf("%d\n", tmp->type);
+		tmp = tmp->next;
+	}
+}
+
+int	main(int ac, char **av, char **env)
 {
 	char			*prompt;
 	static char		*content;
 	t_list			tokens;
-	// t_cmd			*cmd;
+	t_cmd			*cmd;
 	int				i;
 	// t_redir			*redir;
 
@@ -105,11 +119,12 @@ int	main(int ac, char **av)
 		tokenizer(&tokens, content, &i);
 		free(content);
 		syntax_errors(&tokens);
- 		build_cmd(&tokens);
+ 		cmd = build_cmd(&tokens);
+		execution(cmd, env);
 		if (tokens.size)
 			clear_list(&tokens);
+		
 	}
-	
 	if (tokens.size)
 		clear_list(&tokens);
 	return (0);

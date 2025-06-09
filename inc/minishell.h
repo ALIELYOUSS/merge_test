@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 16:25:41 by yael-maa          #+#    #+#             */
-/*   Updated: 2025/06/09 15:52:06 by alel-you         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef MINISHELL_H
+# ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <stdio.h>
@@ -105,7 +93,7 @@ char		*ft_strjoin(char *s1, char *s2);
 // built-in
 void    	ft_env(t_env *env);
 void    	ft_echo(char **str);
-void    	ft_cd(char *prompt, t_env *env);
+void		ft_cd(char **prompt, t_env *env);
 void    	ft_exit(t_env *env);
 void    	ft_pwd();
 // execution

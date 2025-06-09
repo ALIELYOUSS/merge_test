@@ -70,7 +70,6 @@ void	add_cmd(t_cmd **cmd, t_cmd *new)
 {
 	t_cmd	*tmp;
 	
-	printf("here\n");
 	if (!cmd || !new)
 		return ;
 	if (!(*cmd))

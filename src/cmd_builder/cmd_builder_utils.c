@@ -16,6 +16,7 @@ void    clear_directions(t_redir *redir)
 {
 	t_redir *tmp;
 
+    tmp = NULL;
 	while (tmp)
 	{
 		tmp = redir;

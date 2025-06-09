@@ -82,7 +82,7 @@ void    handle_builtin(char *prompt, t_env *env)
     else if (!ft_strncmp(prompt, "echo", 4))
         handle_echo(prompt);
     else if (!ft_strncmp(prompt, "cd", 2))
-        ft_cd(prompt, env);
+        ft_cd(&prompt, env);
 }
 
 int is_builtin(char *prompt)
