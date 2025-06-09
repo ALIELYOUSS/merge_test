@@ -93,7 +93,7 @@ char		*ft_strjoin(char *s1, char *s2);
 // built-in
 void    	ft_env(t_env *env);
 void    	ft_echo(char **str);
-void		ft_cd(char **prompt, t_env *env);
+void		ft_cd(char *prompt, t_env *env);
 void    	ft_exit(t_env *env);
 void    	ft_pwd();
 // execution

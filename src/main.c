@@ -6,7 +6,7 @@
 /*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 00:06:06 by yael-maa          #+#    #+#             */
-/*   Updated: 2025/06/09 21:06:43 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/06/09 21:16:05 by ehafiane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,23 @@ int	main(int ac, char **av, char **env)
 		content = str_trim(prompt);
 		free(prompt);
 		if (!content || !*content)
-			return (1);
+		{
+			free(content);
+			continue;
+		}
 		i = 0;
 		tokenizer(&tokens, content, &i);
 		free(content);
 		syntax_errors(&tokens);
  		cmd = build_cmd(&tokens);
-		execution(cmd, env);
+		if (cmd)
+		{
+			execution(cmd, env);
+			// Free cmd structure
+			// Add cmd free function here if needed
+		}
 		if (tokens.size)
 			clear_list(&tokens);
-		
 	}
 	if (tokens.size)
 		clear_list(&tokens);

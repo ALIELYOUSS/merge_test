@@ -5,6 +5,7 @@ int    execution(t_cmd *cmd_list, char **env)
     t_cmd   *tmp;
     t_env   *env_list; 
     pid_t    i;
+    int      status;
 
     tmp = cmd_list;
     env_list = fill_env_list(env);
@@ -23,13 +24,13 @@ int    execution(t_cmd *cmd_list, char **env)
             {
                 if (is_builtin(tmp->cmd))
                     handle_builtin(tmp->cmd, env_list);
-                if (exec(tmp->cmd, env_list) == -1)
+                else if (exec(tmp->cmd, env_list) == -1)
                     exit(EXIT_FAILURE);
             }
+            tmp = tmp->next;
         }
+        exit(EXIT_SUCCESS);
     }
-    else
-        return (-1);
-    waitpid(i, NULL, 0);
+    waitpid(i, &status, 0);
     return (0);
 }
