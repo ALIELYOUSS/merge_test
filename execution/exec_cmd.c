@@ -22,12 +22,9 @@ int    execution(t_cmd *cmd_list, char **env)
             if (tmp->type == CMD && tmp->cmd)
             {
                 if (is_builtin(tmp->cmd))
-                {
                     handle_builtin(tmp->cmd, env_list);
-                    return (0);
-                }
-                // if (exec(tmp->cmd, env_list) == -1)
-                    // return (-1);
+                if (exec(tmp->cmd, env_list) == -1)
+                    exit(EXIT_FAILURE);
             }
         }
     }

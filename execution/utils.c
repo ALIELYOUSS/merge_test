@@ -1,5 +1,5 @@
 #include "../inc/minishell.h"
-
+#include <string.h>
 void    error_msg(char *str)
 {
 	perror(str);
