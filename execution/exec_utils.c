@@ -104,6 +104,13 @@ int is_builtin(char *prompt)
     return (0);
 }
 
+int is_parent_builtin(char *prompt)
+{
+    if (!ft_strncmp(prompt, "cd", 2))
+        return (1);
+    return (0);
+}
+
 int pipe_counter(t_cmd *list)
 {
     int     count;

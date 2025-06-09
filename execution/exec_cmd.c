@@ -11,6 +11,15 @@ int    execution(t_cmd *cmd_list, char **env)
     env_list = fill_env_list(env);
     if (!env_list)
         return (-1);
+    
+    // Handle built-in commands that need to run in the parent process
+    if (tmp && tmp->type == CMD && tmp->cmd && is_builtin(tmp->cmd) && 
+        is_parent_builtin(tmp->cmd))
+    {
+        handle_builtin(tmp->cmd, env_list);
+        return (0);
+    }
+    
     i = fork();
     if (!i)
     {
@@ -22,9 +31,9 @@ int    execution(t_cmd *cmd_list, char **env)
             // printf("%d\n", tmp->type);
             if (tmp->type == CMD && tmp->cmd)
             {
-                if (is_builtin(tmp->cmd))
+                if (is_builtin(tmp->cmd) && !is_parent_builtin(tmp->cmd))
                     handle_builtin(tmp->cmd, env_list);
-                else if (exec(tmp->cmd, env_list) == -1)
+                else if (!is_builtin(tmp->cmd) && exec(tmp->cmd, env_list) == -1)
                     exit(EXIT_FAILURE);
             }
             tmp = tmp->next;

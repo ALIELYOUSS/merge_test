@@ -98,6 +98,7 @@ void    	ft_exit(t_env *env);
 void    	ft_pwd();
 // execution
 int 		is_builtin(char *prompt);
+int 		is_parent_builtin(char *prompt);
 void    	handle_builtin(char *prompt, t_env *env);
 void    	error_msg(char *str);
 void		handel_redect(t_cmd * cmd);
