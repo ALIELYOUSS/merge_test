@@ -59,6 +59,7 @@ typedef struct s_cmd
 	// struct s_cmd	*l_child;
 	struct s_cmd	*next;
 }	t_cmd;
+
 typedef struct env_s
 {
     char *key;

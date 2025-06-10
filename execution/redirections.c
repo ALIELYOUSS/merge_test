@@ -9,13 +9,13 @@ void handel_out(t_cmd *cmd)
 void handel_in(t_cmd *cmd)
 {
     cmd->in = open(cmd->redir->file, O_RDONLY | O_CREAT, 0777);
-    if(!cmd->in)
+    if (!cmd->in)
         exit(1);
 }
 void handel_append(t_cmd *cmd)
 {
     cmd->out = open(cmd->redir->file, O_WRONLY | O_CREAT| O_APPEND, 0777);
-    if(!cmd->in)
+    if(cmd->in == -1)
         exit(1);
 }
 

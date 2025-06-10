@@ -116,7 +116,7 @@ int	main(int ac, char **av, char **env)
 		if (!content || !*content)
 		{
 			free(content);
-			continue;
+			continue ;
 		}
 		i = 0;
 		tokenizer(&tokens, content, &i);
