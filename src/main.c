@@ -126,8 +126,6 @@ int	main(int ac, char **av, char **env)
 		if (cmd)
 		{
 			execution(cmd, env);
-			// Free cmd structure
-			// Add cmd free function here if needed
 		}
 		if (tokens.size)
 			clear_list(&tokens);
