@@ -8,7 +8,6 @@ OBJ = $(SRC:.c=.o)
 CC = cc
 
 FLAGS = -Wall -Wextra -Werror 
-
 NAME = minishell
 
 # NAME_BONUS = minishell_bonus

@@ -53,8 +53,8 @@ typedef struct s_cmd
 	t_type			type;
 	char			*cmd;
 	t_redir			*redir;
-	int in;
-	int out;
+	int 			in;
+	int 			out;
 	// struct s_cmd	*r_child;
 	// struct s_cmd	*l_child;
 	struct s_cmd	*next;
@@ -86,6 +86,7 @@ typedef struct s_variables
 }	t_var;
 
 // libft_utils
+int 	pipe_counter(t_cmd *list);
 void		ft_putstr_fd(char *s, int fd);
 void	ft_putchar_fd(char c, int fd);
 char		*ft_strchr( char *s, int c);
