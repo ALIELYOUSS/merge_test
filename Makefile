@@ -3,34 +3,25 @@ SRC = src/parser/syntax_errors_utils.c src/parser/syntax_errors.c src/main.c src
 
 OBJ = $(SRC:.c=.o)
 
-# OBJ_BONUS = $(SRC_BONUS:.c=.o)
-
 CC = cc
 
-FLAGS = -Wall -Wextra -Werror 
-NAME = minishell
+FLAGS = -Wall -Wextra -Werror -g3
 
-# NAME_BONUS = minishell_bonus
+NAME = minishell
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) -o $(NAME) -L/usr/local/lib -I/usr/local/include -lreadline
-#-I$(HOME)/.local/include -L$(HOME)/.local/lib -lreadline
-
-bonus: $(NAME_BONUS)
-
-$(NAME_BONUS):
-	$(CC) $(FLAGS) $(OBJ_BONUS) -o $(NAME_BONUS)
 
 %.o:%.c
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(OBJ_BONUS)
+	rm -f $(OBJ)
 
 fclean: clean
-	rm -f $(NAME) $(NAME_BONUS)
+	rm -f $(NAME)
 
 re:fclean all
 
