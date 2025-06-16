@@ -104,11 +104,12 @@ int 		is_builtin(char *prompt);
 void    	handle_builtin(char *prompt, t_env *env);
 void    	error_msg(char *str);
 void		handel_redect(t_cmd * cmd);
-int    		exec(char *prompt, t_env *env);
+void    exec(char *prompt, t_env *env, char **env_p);
 char		*env_path(t_env *env, char *key);
 t_env		*fill_env_list(char **envp);
 t_env		*create_env_node( char *var);
 int     	td_len(char **str);
+void    	free_td(char **str);
 int			execution(t_cmd *cmd_list, char **env);
 // parsing
 int			ft_strlen(char *str);

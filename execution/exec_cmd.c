@@ -50,7 +50,7 @@
 // }
 
 
-void handle_pipe(t_cmd *cmd_list, t_env *env)
+void handle_pipe(t_cmd *cmd_list, t_env *env_list, char **env)
 {
     int num_cmds = pipe_counter(cmd_list) + 1;
     int pipe_fds[2 * (num_cmds - 1)];
@@ -86,7 +86,10 @@ void handle_pipe(t_cmd *cmd_list, t_env *env)
             j = -1;
             while (++j < 2 * (num_cmds - 1))
                 close(pipe_fds[j]);
-            exec(tmp->cmd, env);
+            if (!is_builtin(tmp->cmd))
+                exec(tmp->cmd, env_list, env);
+            else
+                handle_builtin(tmp->cmd, env_list);
             exit(EXIT_FAILURE);
         }
         tmp = tmp->next;
@@ -110,26 +113,26 @@ int    execution(t_cmd *cmd_list, char **env)
     tmp = cmd_list;
     env_list = fill_env_list(env);
     if (!env_list)
-    return (-1);
-    // printf("%d\n", pipe_counter(cmd_list));
-    // exit(0);
+        return (-1);
     i = fork();
     if (!i)
     {
-        if (tmp && tmp->type == CMD && tmp->cmd && is_builtin(tmp->cmd))
-            handle_builtin(tmp->cmd, env_list);
-        else if (tmp && tmp->type == CMD && pipe_counter(cmd_list) > 0)
+        if (tmp && tmp->type == CMD && pipe_counter(cmd_list) > 0)
         {
-            puts("her");
-            handle_pipe(cmd_list, env_list);
+            handle_pipe(cmd_list, env_list, env);
             exit(EXIT_SUCCESS);
         }
+        else if (tmp && tmp->type == CMD && tmp->cmd && is_builtin(tmp->cmd))
+            handle_builtin(tmp->cmd, env_list);
         while (tmp)
         {
             if (tmp->type == OUT || tmp->type ==IN || tmp->type == APP || tmp->type == HRDOC)
                 handel_redect(tmp);
-            if (!is_builtin(tmp->cmd) && exec(tmp->cmd, env_list) == -1)
-                    exit(EXIT_FAILURE);
+            else if (!is_builtin(tmp->cmd))
+            {
+                exec(tmp->cmd, env_list, env);
+                exit(EXIT_FAILURE);
+            }
             tmp = tmp->next;
         }
         exit(EXIT_SUCCESS);

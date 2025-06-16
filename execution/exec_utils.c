@@ -15,38 +15,68 @@ char    *add_cmd_to_path(char *path, char *cmd)
     return (ret);
 }
 
-int    exec(char *prompt, t_env *env)
+char    *return_path(char *cmd, t_env *env_list)
 {
-    int i;
-    char *path;
-    char **paths;
+    char    **paths;
+    char    *path_list;
+    char    *path_tester;
+    int      i;
+
+    i = 0;
+    path_tester = NULL;
+    path_list = env_path(env_list, "PATH");
+    if (!path_list)
+        error_msg("path not found in env");
+    paths = ft_split(path_list, ':');
+    if (!paths || !paths[0])
+        return (NULL);
+    while (paths[i])
+    {
+        path_tester = add_cmd_to_path(paths[i], cmd);
+        if (!path_tester)
+            return (NULL);
+        else if (!access(path_tester, X_OK))
+        {
+            free_td(paths);
+            return (path_tester);
+        }
+        free(path_tester);
+        i++;
+    }
+    free_td(paths);
+    return (NULL);
+}
+
+void    exec(char *prompt, t_env *env, char **env_p)
+{
     char *cmd_path;
     char **tokens;
 
-    i = 0;
+    cmd_path = NULL;
     tokens = ft_split(prompt, ' ');
     if (!tokens)
-        return (-1);
-    path = NULL;
-    path = env_path(env, "PATH");
-    paths = ft_split(path, ':');
-    if (!paths || !path)
-        return (-1);
-    while (paths[i])
+       error_msg("split");
+    cmd_path = return_path(tokens[0], env);
+    if (!cmd_path)
     {
-        cmd_path = add_cmd_to_path(paths[i], tokens[0]);
-        if (!access(cmd_path, X_OK))
+        if (!ft_strncmp(tokens[0], "./minishell", ft_strlen("./minishell")))
         {
-            execve(cmd_path, tokens, NULL);
-            free(cmd_path);
+            execve("./minishell", tokens, env_p);
+            free_td(tokens);
+            exit(EXIT_FAILURE);
         }
-        i++;
+        else
+        {
+            free_td(tokens);
+            error_msg("path not found");
+        }
     }
-    i = 0;
-    while (paths[i++])
-        free(paths[i]);
-    free(paths);
-    return (0);
+    else
+    {
+        execve(cmd_path, tokens, env_p);
+        free(cmd_path);
+        error_msg("execve");
+    }
 }
 
 void    free_td(char **str)
