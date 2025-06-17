@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include "../get_next_line/get_next_line.h"
 
 
 
@@ -86,9 +87,9 @@ typedef struct s_variables
 }	t_var;
 
 // libft_utils
-int 	pipe_counter(t_cmd *list);
+int 		pipe_counter(t_cmd *list);
 void		ft_putstr_fd(char *s, int fd);
-void	ft_putchar_fd(char c, int fd);
+void		ft_putchar_fd(char c, int fd);
 char		*ft_strchr( char *s, int c);
 char		**ft_split(char *s, char c);
 char		*ft_strjoin(char *s1, char *s2);

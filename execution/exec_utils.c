@@ -47,12 +47,41 @@ char    *return_path(char *cmd, t_env *env_list)
     return (NULL);
 }
 
+char *remove_cotes(char *arg)
+{
+    char    *ret;
+    int     i;
+    int     x;
+
+    if (!arg)
+        return (NULL);
+    ret = malloc((ft_strlen(arg) - 2) + 1);
+    if (!ret)
+        return (NULL);
+    i = 0;
+    x = 0;
+    while (arg[i])
+    {
+        if (arg[i] != '"')
+        {
+            ret[x] = arg[i];
+            x++;
+        }
+        i++;
+    }
+    free(arg);
+    ret[x] = '\0';
+    return (ret);
+}
+
 void    exec(char *prompt, t_env *env, char **env_p)
 {
     char *cmd_path;
     char **tokens;
 
     cmd_path = NULL;
+    if (ft_strchr(prompt, '"'))
+        prompt = remove_cotes(prompt);
     tokens = ft_split(prompt, ' ');
     if (!tokens)
        error_msg("split");
@@ -61,19 +90,26 @@ void    exec(char *prompt, t_env *env, char **env_p)
     {
         if (!ft_strncmp(tokens[0], "./minishell", ft_strlen("./minishell")))
         {
-            execve("./minishell", tokens, env_p);
+            
+            if (execve("./minishell", tokens, env_p) == -1) {
+                perror("execve failed");
+                exit(EXIT_FAILURE);
+            }
             free_td(tokens);
             exit(EXIT_FAILURE);
         }
         else
         {
             free_td(tokens);
-            error_msg("path not found");
+            error_msg("commandnot found");
         }
     }
     else
     {
-        execve(cmd_path, tokens, env_p);
+        if (execve(cmd_path, tokens, env_p) == -1) {
+            perror("execve failed");
+            exit(EXIT_FAILURE);
+        }
         free(cmd_path);
         error_msg("execve");
     }
