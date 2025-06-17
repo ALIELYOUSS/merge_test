@@ -13,6 +13,6 @@ void    ft_exit(t_env *env)
         head = tmp;
         head = head->next;
     }
-    ft_putstr_fd("exit\n", 1);    
+    printf("exit\n");
     exit(0);
 }
