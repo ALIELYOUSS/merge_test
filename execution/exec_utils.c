@@ -149,6 +149,8 @@ void    handle_builtin(char *prompt, t_env *env)
         handle_echo(prompt);
     else if (!ft_strncmp(prompt, "cd", 2))
         ft_cd(prompt, env);
+    else if (!ft_strncmp(prompt, "export", 6))
+        ft_export(prompt, &env);
 }
 
 int is_builtin(char *prompt)

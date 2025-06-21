@@ -168,6 +168,31 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
+char	*ft_substr(char *s, int start, int len)
+{
+	int		i;
+	char	*sub;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	if (len >= ft_strlen(s + start))
+		len = ft_strlen(s + start);
+	sub = (char *)malloc(sizeof(char) * (len + 1));
+	if (!sub)
+		return (NULL);
+	while (i < len)
+	{
+		sub[i] = s[start];
+		start++;
+		i++;
+	}
+	sub[i] = '\0';
+	return (sub);
+}
+
 void	ft_putchar_fd(char c, int fd)
 {
 	if (fd >= 0)

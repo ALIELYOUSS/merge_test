@@ -1,5 +1,67 @@
 #include "../inc/minishell.h"
 
+int     is_heredoc(t_cmd *cmd_list)
+{
+    t_cmd   *tmp;
+
+    tmp = cmd_list;
+    while (tmp)
+    {
+        if (tmp->type == HRDOC)
+            return (1);
+        tmp = tmp->next;
+    }
+    return (0);
+}
+
+char    *find_delimiter(char *cmd)
+{
+    char    **splited;
+    char    *delimiter;
+
+    delimiter = NULL;
+    splited = ft_split(cmd, ' ');
+    if (!splited)
+        return (NULL);
+    while (*splited)
+    {
+        if (!ft_strncmp(*splited, "<<", ft_strlen(*splited)))
+        {
+            splited++;
+            delimiter =  *splited;
+            free_td(splited);
+            return (delimiter);
+        }
+        splited++;
+    }
+    free(splited);
+    return (delimiter);
+}
+
+void    handle_heredoc(t_cmd *cmd_list, t_env *env, char **envp)
+{
+    t_cmd   *tmp;
+    int     fd_hrdoc;
+
+    tmp = cmd_list;
+    fd_hrdoc = 0;
+    printf("here\n");
+    if (tmp->cmd)
+        fd_hrdoc = herdoc_handler(find_delimiter(tmp->cmd));
+    printf("%s\n", find_delimiter(tmp->cmd));
+    exit(0);
+    if (dup2(fd_hrdoc, 0) == -1)
+    {
+        perror("dup2");
+        exit(EXIT_FAILURE);
+    }
+    if (!is_builtin(tmp->cmd))
+        exec(tmp->cmd, env, envp);
+    else
+        handle_builtin(tmp->cmd, env);
+    exit(EXIT_FAILURE);
+}
+
 void handle_pipe(t_cmd *cmd_list, t_env *env_list, char **env)
 {
     t_cmd   *tmp;
@@ -43,10 +105,6 @@ void handle_pipe(t_cmd *cmd_list, t_env *env_list, char **env)
         {
             if (i > 0 && flag)
                 dup2(pipe_fds[(i - 1) * 2], 0);
-            else if (!flag)
-            {
-
-            }
             if (tmp->next)
                 dup2(pipe_fds[i * 2 + 1], 1);
             j = -1;
@@ -75,8 +133,10 @@ int    execution(t_cmd *cmd_list, char **env)
     t_cmd   *tmp;
     t_env   *env_list; 
     pid_t    i;
-    int      status;
+    int      ps;
+    int      hrdoc_fd;
     
+    hrdoc_fd = 0;
     tmp = cmd_list;
     env_list = fill_env_list(env);
     if (!env_list)
@@ -89,24 +149,18 @@ int    execution(t_cmd *cmd_list, char **env)
             handle_pipe(cmd_list, env_list, env);
             exit(EXIT_SUCCESS);
         }
-        else if (tmp && tmp->type == CMD && tmp->cmd && is_builtin(tmp->cmd))
-        {
-            puts("here");
+        if (tmp && tmp->type == CMD && tmp->cmd && is_builtin(tmp->cmd))
             handle_builtin(tmp->cmd, env_list);
-        }
         while (tmp)
         {
             if (tmp->type == OUT || tmp->type ==IN || tmp->type == APP || tmp->type == HRDOC)
                 handel_redect(tmp);
             else if (!is_builtin(tmp->cmd))
-            {
                 exec(tmp->cmd, env_list, env);
-                exit(EXIT_FAILURE);
-            }
             tmp = tmp->next;
         }
         exit(EXIT_SUCCESS);
     }
-    waitpid(i, &status, 0);
+    waitpid(i, &ps, 0);
     return (0);
 }
