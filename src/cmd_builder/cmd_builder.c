@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_builder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yael-maa <yael-maa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 22:43:02 by yael-maa          #+#    #+#             */
-/*   Updated: 2025/06/02 17:19:07 by yael-maa         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:38:00 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	add_cmd(t_cmd **cmd, t_cmd *new)
 {
 	t_cmd	*tmp;
 	
+	printf("here\n");
 	if (!cmd || !new)
 		return ;
 	if (!(*cmd))
@@ -122,7 +123,6 @@ t_cmd	*build_cmd(t_list *tokens)
 						t_cmd *last = last_cmd(&cmd);
 						if (last)
 							last->cmd = join_it(last->cmd, token->content);
-						
 						token = token->next;
 					}
 					// f = 1;
@@ -134,7 +134,7 @@ t_cmd	*build_cmd(t_list *tokens)
 			{
 				add_redir(&cmd, new_redir(token->next->content, token->type));
 				token = token->next;
-				token = token->next;
+				// token = token->next;
 				f = 1;
 			}
 		}

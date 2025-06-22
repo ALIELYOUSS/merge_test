@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_builder_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yael-maa <yael-maa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 22:45:09 by yael-maa          #+#    #+#             */
-/*   Updated: 2025/06/08 18:44:31 by yael-maa         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:33:38 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void    clear_directions(t_redir *redir)
 {
 	t_redir *tmp;
 
-    tmp = NULL;
-	while (tmp)
+    tmp = redir;
+	while (redir)
 	{
 		tmp = redir;
 		redir = redir->next;
@@ -45,12 +45,8 @@ void    clear_cmd(t_cmd *cmd)
         }
 		if (tmp->redir)
 			clear_directions(tmp->redir);
-        if (tmp)
-        {
-            free(tmp);
-            tmp = NULL;
-            cmd = NULL;
-        }
+        free(tmp);
+        tmp = NULL;
+        // cmd = NULL;
     }
 }
-

@@ -18,21 +18,23 @@ char    *find_delimiter(char *cmd)
 {
     char    **splited;
     char    *delimiter;
+    int     i;
 
+    i = 0;
     delimiter = NULL;
     splited = ft_split(cmd, ' ');
     if (!splited)
         return (NULL);
-    while (*splited)
+    while (splited[i])
     {
-        if (!ft_strncmp(*splited, "<<", ft_strlen(*splited)))
+        if (!ft_strncmp(*splited, "<<", ft_strlen(splited[i])))
         {
-            splited++;
-            delimiter =  *splited;
+            i++;
+            delimiter = splited[i];
             free_td(splited);
             return (delimiter);
         }
-        splited++;
+        i++;
     }
     free(splited);
     return (delimiter);
@@ -45,11 +47,9 @@ void    handle_heredoc(t_cmd *cmd_list, t_env *env, char **envp)
 
     tmp = cmd_list;
     fd_hrdoc = 0;
-    printf("here\n");
     if (tmp->cmd)
         fd_hrdoc = herdoc_handler(find_delimiter(tmp->cmd));
     printf("%s\n", find_delimiter(tmp->cmd));
-    exit(0);
     if (dup2(fd_hrdoc, 0) == -1)
     {
         perror("dup2");

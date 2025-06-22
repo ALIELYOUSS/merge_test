@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehafiane <ehafiane@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 00:06:06 by yael-maa          #+#    #+#             */
-/*   Updated: 2025/06/09 21:16:05 by ehafiane         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:00:26 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,19 +89,35 @@ void	print_cmd(t_cmd *cmd)
 	}
 }
 
+void	print_cmd_list(t_cmd *cmd)
+{
+	t_cmd *tmp = cmd;
+	while (tmp)
+	{
+		if (tmp->cmd)
+			printf("cmd: %s\n", tmp->cmd);
+		printf("type: %d\n", tmp->type);
+		tmp = tmp->next;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char			*prompt;
 	static char		*content;
 	t_list			tokens;
 	t_cmd			*cmd;
+	t_env			*env_list;
 	int				i;
 	// t_redir			*redir;
 
 	(void)ac;
 	(void)av;
-	ft_bzero(&tokens, sizeof(t_list));
 	tokens.size = 0;
+	ft_bzero(&tokens, sizeof(t_list));
+	env_list = fill_env_list(env);
+	if (!env_list)
+		return (-1);
 	while (1)
 	{
 		// reset_param(&tokens, content);
@@ -123,10 +139,11 @@ int	main(int ac, char **av, char **env)
 		free(content);
 		syntax_errors(&tokens);
  		cmd = build_cmd(&tokens);
-		if (cmd)
-		{
-			execution(cmd, env);
-		}
+		if (!cmd)
+			break ;
+		else if (is_heredoc(cmd))
+			handle_heredoc(cmd, env_list, env);
+		execution(cmd, env);
 		if (tokens.size)
 			clear_list(&tokens);
 	}
